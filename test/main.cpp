@@ -176,8 +176,7 @@ SSLTQSSKDDEILSMIAIVGDACIDWRSHIVSFSYIHVLTVTSNLSGINF
 >H35
 SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
 )SEQ");*/
-    ebc_be_set_input_from_file(be, "/media/user/Workstation/Thesis/libpahmm"
-                               "/test/samples/nonsense50x70.fasta");
+    ebc_be_set_input_from_file(be, "nonsense50x70.fasta");
 
     EBCSequences *seq = ebc_be_execute_jtt_model(be);
     cout << ebc_be_last_error_msg(be) << endl;
