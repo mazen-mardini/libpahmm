@@ -23,7 +23,7 @@ and L is their length (assuming all have the same length).
 Let's see how libpahmm can be used in Python and C. This following example will calculate the 
 distance between two sequences in fasta file containing RNA-data.
 
-###Using Python
+### Using Python
 ```python
 from pahmm import *
 
@@ -43,7 +43,7 @@ sequences = be.execute_hky85_model()
 sequences.get_distance_from_names(b"seq1", b"seq2")
 ```
 
-###Using C
+### Using C
 1\. Create a banding estimator object:
 ```c++
 EBCBandingEstimator *be = ebc_be_create();
