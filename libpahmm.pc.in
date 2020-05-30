@@ -1,0 +1,14 @@
+# pahmm - paHMM-Tree Library for Python and C
+# Copyright (C) 2020, Mazen Mardini
+# GPLv3
+
+prefix=@PREFIX@
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${exec_prefix}/lib
+
+Name: pahmm
+Description: 
+Version: @VERSION@
+Libs: -L${libdir} -lpahmm
+Cflags: -I${includedir}
