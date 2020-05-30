@@ -21,7 +21,7 @@ and L is their length (assuming all have the same length).
 
 ## Basic usage
 Let's see how libpahmm can be used in Python and C. This following examples will calculate the 
-distance between two sequences in fasta file containing RNA-data.
+distance between two sequences from a FASTA-file containing RNA-data.
 
 ### Using Python
 ```python
