@@ -1,6 +1,6 @@
 # paHMM-Tree Library for Python and C
-paHMM-Tree stands for "pairwise statistical phylogenetic distance estimation 
-using pair hidden Markov models. It's a tool developed by Marcin Bogusz and Simon Whelan.
+paHMM-Tree is short for "pairwise statistical phylogenetic distance estimation 
+using pair hidden Markov models". It's a tool developed by Marcin Bogusz and Simon Whelan.
 This library, "**libpahmm**" exposes the tool's capabilities to **Python** as well as **C**.
 
 ## What is libpahmm?
@@ -20,7 +20,7 @@ and L is their length (assuming all have the same length).
 - It's free and open-source.
 
 ## Basic usage
-Let's see how libpahmm can be used in Python and C. This following example will calculate the 
+Let's see how libpahmm can be used in Python and C. This following examples will calculate the 
 distance between two sequences in fasta file containing RNA-data.
 
 ### Using Python
