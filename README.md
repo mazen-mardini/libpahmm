@@ -97,7 +97,7 @@ Then navigate to "libpahmm/", and enter the following command to build for Pytho
 python3 setup.py install
 ```
 Note: Instead of "install" you could write "develop" (installs, but doesn't copy any binaries to 
-Python's site-packages folder) or "bdist_egg" to create a binary package, ready to be distributed.
+Python's site-packages folder) or "bdist_egg" to create a binary package that's ready to be distributed.
 
 To build and install the C-library, just run:
 ```shell script
@@ -108,12 +108,12 @@ make
 sudo make install
 ```
 To uninstall, look inside install_manifest.txt and delete everything that's listed there on your system. 
-This can be done the follwing way. Make sure to check that install_manifest.txt contains the files you
+This can be done in the following way. Make sure to check that install_manifest.txt contains the files you
 actually want to delete:
 ```shell script
 cat install_manifest.txt
 ```
-If everything you want to remove everything listed in the file, then run the following command:
+If everything you want to remove is listed in the file, then run the following command:
 ```shell script
 sudo xargs rm < install_manifest.txt
 ```
