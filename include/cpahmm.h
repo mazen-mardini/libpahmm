@@ -44,6 +44,12 @@
 extern "C"
 {
 #endif
+
+#define EBC_BE_DEFAULTS_INDEL_NB_PROBABILITY 0.0
+#define EBC_BE_DEFAULTS_INDEL_RATE 0.0
+#define EBC_BE_DEFAULTS_ALPHA 0.5
+#define EBC_BE_DEFAULTS_GAMMA_RATE_CATEGORIES 4
+
     /*
      * A set of sequences.
      */
