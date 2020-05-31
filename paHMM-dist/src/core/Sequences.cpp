@@ -32,10 +32,10 @@ Sequences::Sequences(IParser* iParser,Definitions::SequenceType st, bool rg)
 
 	unsigned int size = iParser->getSequenceCount();
 	if (size <= 0){
-		throw HmmException("No FASTA sequences found in the input file. Quitting...\n");
+        throw HmmException("No FASTA sequences found in the input file.");
 	}
 	else if (size < 3){
-		throw HmmException("paHMM-Tree requires at least 3 sequences to run. Quitting...\n");
+        throw HmmException("paHMM-Tree requires at least 3 sequences to run.");
 	}
 
 	this->sequenceCount = size;

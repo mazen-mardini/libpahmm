@@ -182,7 +182,7 @@ SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
     cout << ebc_be_last_error_msg(be) << endl;
     unsigned int seqCount = ebc_seq_count(seq);
 
-    cout << seqCount << "\n";
+    cout << seqCount << endl;
     for (unsigned int seqId1 = 0; seqId1 < seqCount; seqId1++)
     {
         cout << ebc_seq_get_name(seq, seqId1) << "        ";
@@ -190,7 +190,7 @@ SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
         {
             cout << ebc_seq_get_distance(seq, seqId1, seqId2) << " ";
         }
-        cout << "\n";
+        cout << endl;
     }
 
     // Clean up

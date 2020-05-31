@@ -100,8 +100,5 @@ EBCSequences *ebc_seq_create(EBCBandingEstimator *be, Definitions::ModelType mod
                                  be->gamma_rate_categories, be->alpha, tme->getGuideTree());
     seq->_bandingEstimator = bandingEstimator;
 
-    // Execute model
-    bandingEstimator->optimizePairByPair();
-
     return seq;
 }
