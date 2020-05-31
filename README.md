@@ -40,7 +40,7 @@ be.set_str_input(b"[sequences in FASTA-format here]")
 sequences = be.execute_hky85_model()
 
 # 4. Calculate distance between two sequences
-sequences.get_distance_from_names(b"seq1", b"seq2")
+d = sequences.get_distance_from_names(b"seq1", b"seq2")
 ```
 
 ### Using C
