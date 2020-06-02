@@ -31,7 +31,7 @@ from pahmm import *
 be = BandingEstimator()
 
 # 2a. (Alternative a) Load a file
-be.set_file_input("covid-19_0.fasta")
+be.set_file_input("sequences.fasta")
 
 # 2b. (Alternative b) Load a string
 be.set_str_input(b"[sequences in FASTA-format here]")
@@ -50,7 +50,7 @@ EBCBandingEstimator *be = ebc_be_create();
 ```
 2a\. (Alternative a) Load a file:
 ```c++
-ebc_be_set_input_from_file(be, "covid-19_0.fasta");
+ebc_be_set_input_from_file(be, "sequences.fasta");
 ```
 2b\. (Alternative b) Load a string:
 ```c++
