@@ -81,3 +81,4 @@ python/python_pahmm.egg-info/*
 dist/*
 python/*.so
 python/pahmm/*.so
+python/pahmm/*.dylib
