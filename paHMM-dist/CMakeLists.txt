@@ -39,12 +39,13 @@ add_subdirectory(dlib)
 
 # Settings for dlib
 set_property(TARGET dlib PROPERTY CXX_STANDARD 11)
-add_definitions(-DDLIB_NO_GUI_SUPPORT=ON)
+add_definitions(-DDLIB_NO_GUI_SUPPORT)
+add_definitions(-DDLIB_DISABLE_ASSERTS)
 
 add_library(paHMM-dist STATIC ${SOURCE_PATHS} dlib/dlib/all/source.cpp)
 target_link_libraries(paHMM-dist PRIVATE dlib)
 
-add_definitions(-DDLIB_DISABLE_ASSERTS)
+
 
 target_include_directories(paHMM-dist PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/src

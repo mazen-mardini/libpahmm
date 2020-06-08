@@ -57,7 +57,7 @@ add_subdirectory(paHMM-dist)
 
 # Settings for dlib
 set_property(TARGET dlib PROPERTY CXX_STANDARD 11)
-add_definitions(-DDLIB_NO_GUI_SUPPORT=ON)
+add_definitions(-DDLIB_NO_GUI_SUPPORT)
 # Because something is turning it on, we have to turn it off:
 add_definitions(-DDLIB_DISABLE_ASSERTS)
 
