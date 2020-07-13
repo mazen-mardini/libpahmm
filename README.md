@@ -83,11 +83,11 @@ on Windows, only on Linux and MacOS. Therefore the library *does not have offici
 as a C-library, you could compile it yourself by following the instructions under the Compilation-section of this README.
 
 ## Compilation
-To compile libpahmm you'll need to install CMake. This can be done with the following command on Linux (Ubuntu):
+To compile libpahmm you'll need to install `CMake`. This can be done with the following command on Linux (Ubuntu):
 ```shell script
 sudo apt install cmake
 ```
-On MacOS I'd recommend using [Brew](https://brew.sh "Homebrew website") for easy installation. Apart from CMake you'll need to have libpng installed:
+On MacOS I'd recommend using [Brew](https://brew.sh "Homebrew website") for easy installation, and apart from `CMake` you'll need to have `libpng` installed:
 ```shell script
 brew install cmake libpng
 ```
