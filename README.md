@@ -117,6 +117,13 @@ If everything you want to remove is listed in the file, then run the following c
 ```shell script
 sudo xargs rm < install_manifest.txt
 ```
+### Compilation problems?
+
+For reasons I don't understand, CMake could not find the `libpng` include files on my Mac, even though the library is there. The simplest way to solve that was to extend the C++ include path before installing:
+```
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/include
+
+
 
 ## License
 Libpahmm and paHMM-Tree are licensed under the GNU General Public License version 3.0 (GPLv3).
