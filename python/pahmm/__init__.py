@@ -17,7 +17,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses>.
 ##==============================================================================
 
-__ALL__ = ["PAHMMError", "BandingEstimator", "Sequences"]
+__all__ = ["PAHMMError", "BandingEstimator", "Sequences"]
 
 from _pahmm_cffi import lib as _lib, ffi as _ffi
 from typing import AnyStr, Union
