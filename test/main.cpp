@@ -165,7 +165,7 @@ SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
 int test_c_api()
 {
     EBCBandingEstimator *be = ebc_be_create();
-    /*ebc_be_set_input(be, R"SEQ(>H0
+    ebc_be_set_input(be, R"SEQ(>H0
 ENVVDDTSDRPTICQKWNTTSAAISKYDFLSFYPHYRPASVETFLNLLLK
 >H4
 ENVVDDKSDRPTICQKWNATSAAISKYNFLEFYPHVRTASVEMFLNLLLK
@@ -175,8 +175,8 @@ SPATQSSKDDALLSMAATVGEASLDKRSHIFSFPSMHVRTVTSDLSGLAF
 SSLTQSSKDDEILSMIAIVGDACIDWRSHIVSFSYIHVLTVTSNLSGINF
 >H35
 SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
-)SEQ");*/
-    ebc_be_set_input_from_file(be, "nonsense50x70.fasta");
+)SEQ");
+    //ebc_be_set_input_from_file(be, "nonsense50x70.fasta");
 
     EBCSequences *seq = ebc_be_execute_jtt_model(be);
     cout << ebc_be_last_error_msg(be) << endl;

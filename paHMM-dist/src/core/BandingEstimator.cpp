@@ -138,27 +138,30 @@ double BandingEstimator::optimizePair(int i)
         return this->divergenceTimes[i];
     }
 
-    thread_local OptimizeState state(this);
+    EvolutionaryPairHMM* hmm;
+    Band* band;
+    DistanceMatrix* dm = gt->getDistanceMatrix();
+    PairHmmCalculationWrapper* wrapper = new PairHmmCalculationWrapper();
+    double result;
 
     DEBUG("Optimizing distance for pair #" << i);
     std::pair<unsigned int, unsigned int> idxs = inputSequences->getPairOfSequenceIndices(i);
     INFO("Running pairwise calculator for sequence id " << idxs.first << " and " << idxs.second
             << " ,number " << i+1 <<" out of " << pairCount << " pairs" );
     BandCalculator* bc = new BandCalculator(inputSequences->getSequencesAt(idxs.first), inputSequences->getSequencesAt(idxs.second),
-            substModel, indelModel, state.dm->getDistance(idxs.first,idxs.second));
-    state.band = bc->getBand();
-
+            substModel, indelModel, dm->getDistance(idxs.first,idxs.second));
+    band = bc->getBand();
     if (algorithm == Definitions::AlgorithmType::Viterbi)
     {
         DEBUG("Creating Viterbi algorithm to optimize the pairwise divergence time...");
-        state.hmm = new ViterbiPairHMM(inputSequences->getSequencesAt(idxs.first), inputSequences->getSequencesAt(idxs.second), substModel, indelModel,
-                                 Definitions::DpMatrixType::Full, state.band);
+        hmm = new ViterbiPairHMM(inputSequences->getSequencesAt(idxs.first), inputSequences->getSequencesAt(idxs.second),
+                substModel, indelModel, Definitions::DpMatrixType::Full, band);
     }
     else if (algorithm == Definitions::AlgorithmType::Forward)
     {
         DEBUG("Creating forward algorithm to optimize the pairwise divergence time...");
-        state.hmm = new ForwardPairHMM(inputSequences->getSequencesAt(idxs.first), inputSequences->getSequencesAt(idxs.second), substModel, indelModel,
-                                 Definitions::DpMatrixType::Full, state.band);
+        hmm = new ForwardPairHMM(inputSequences->getSequencesAt(idxs.first), inputSequences->getSequencesAt(idxs.second),
+                substModel, indelModel, Definitions::DpMatrixType::Full, band);
     }
 
     //hmm->setDivergenceTimeAndCalculateModels(modelParams->getDivergenceTime(0)); //zero as there's only one pair!
@@ -167,31 +170,30 @@ double BandingEstimator::optimizePair(int i)
     //lsp.setTargetHMM(hmm);
     //lsp.getLikelihoodSurface();
 
+    wrapper->setTargetHMM(hmm);
     DUMP("Set model parameter in the hmm...");
-    state.wrapper->setModelParameters(modelParams);
-    state.wrapper->setTargetHMM(state.hmm);
-    numopt->setTarget(state.wrapper);
+    wrapper->setModelParameters(modelParams);
     modelParams->setUserDivergenceParams({bc->getClosestDistance()});
+    numopt->setTarget(wrapper);
     numopt->setAccuracy(bc->getBrentAccuracy());
     numopt->setBounds(bc->getLeftBound(), bc->getRightBound() < 0 ? modelParams->divergenceBound : bc->getRightBound());
 
-    state.result = numopt->optimize() * -1.0;
-    DEBUG("Likelihood after pairwise optimization: " << state.result);
-    if (state.result <= (Definitions::minMatrixLikelihood /2.0))
+    result = numopt->optimize() * -1.0;
+    DEBUG("Likelihood after pairwise optimization: " << result);
+    if (result <= (Definitions::minMatrixLikelihood /2.0))
     {
         DEBUG("Optimization failed for pair #" << i << " Zero probability FWD");
-        state.band->output();
-        dynamic_cast<DpMatrixFull*>(state.hmm->M->getDpMatrix())->outputValuesWithBands(state.band->getMatchBand() ,state.band->getInsertBand(),state.band->getDeleteBand(),'|', '-');
-        dynamic_cast<DpMatrixFull*>(state.hmm->X->getDpMatrix())->outputValuesWithBands(state.band->getInsertBand(),state.band->getMatchBand() ,state.band->getDeleteBand(),'\\', '-');
-        dynamic_cast<DpMatrixFull*>(state.hmm->Y->getDpMatrix())->outputValuesWithBands(state.band->getDeleteBand(),state.band->getMatchBand() ,state.band->getInsertBand(),'\\', '|');
+        band->output();
+        dynamic_cast<DpMatrixFull*>(hmm->M->getDpMatrix())->outputValuesWithBands(band->getMatchBand() ,band->getInsertBand(),band->getDeleteBand(),'|', '-');
+        dynamic_cast<DpMatrixFull*>(hmm->X->getDpMatrix())->outputValuesWithBands(band->getInsertBand(),band->getMatchBand() ,band->getDeleteBand(),'\\', '-');
+        dynamic_cast<DpMatrixFull*>(hmm->Y->getDpMatrix())->outputValuesWithBands(band->getDeleteBand(),band->getMatchBand() ,band->getInsertBand(),'\\', '|');
     }
-    this->divergenceTimes[i] = modelParams->getDivergenceTime(0);
 
-    delete state.band;
+    delete band;
     delete bc;
-    delete state.hmm;
+    delete hmm;
 
-    return state.result;
+    return modelParams->getDivergenceTime(0);
 }
 
 

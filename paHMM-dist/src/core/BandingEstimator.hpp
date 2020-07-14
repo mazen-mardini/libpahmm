@@ -91,19 +91,6 @@ protected:
 
 	OptimizedModelParameters* modelParams;
 
-    struct OptimizeState {
-        EvolutionaryPairHMM* hmm;
-        Band* band;
-        DistanceMatrix* dm;
-        PairHmmCalculationWrapper* wrapper = new PairHmmCalculationWrapper();
-
-        double result;
-
-        OptimizeState(BandingEstimator* be)
-            : dm(be->gt->getDistanceMatrix()) {}
-        ~OptimizeState() {delete wrapper;}
-    };
-
 public:
     BandingEstimator(Definitions::AlgorithmType at, Sequences* inputSeqs, Definitions::ModelType model,std::vector<double> indel_params,
 			std::vector<double> subst_params, Definitions::OptimizationType ot, unsigned int rateCategories, double alpha, GuideTree* gt);
