@@ -17,19 +17,17 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses>.
 ##==============================================================================
 
-project(test)
+project(examples)
 
-add_executable(tests
+add_executable(examples
     main.cpp
 )
 
-target_link_libraries(tests PUBLIC pahmm)
-target_link_libraries(tests PUBLIC paHMM-dist)
-target_link_libraries(tests PUBLIC pthread)
-target_include_directories(tests PRIVATE
+target_link_libraries(examples PUBLIC pahmm)
+target_link_libraries(examples PUBLIC paHMM-dist)
+target_link_libraries(examples PUBLIC pthread)
+target_include_directories(examples PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../src>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dlib>
 )
-
-#enable_testing()
-#add_test(NAME AllTests COMMAND test/tests)

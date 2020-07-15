@@ -36,7 +36,7 @@ list(APPEND SOURCE_FILES
     src/cpahmm.cpp
     src/cpahmm_p.h
     src/cpahmm_p.cpp
-    include/StreamParser.hpp
+    src/StreamParser.hpp
     src/StreamParser.cpp
     README.md
     LICENSE
