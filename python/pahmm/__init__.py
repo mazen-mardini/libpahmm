@@ -49,6 +49,27 @@ class BandingEstimator:
         # Tell the garbage collector how to free the resources
         self.__be = _ffi.gc(self.__be, _lib.ebc_be_free)
 
+    def apply_model(self, model):
+        '''
+        After you have associated sequence data to the estimator (using
+        set_str_input or set_file_input), use this function to apply a model to
+        the data. Necessary parameters are estimated and rough distances are
+        computed. This is a convenience function.
+        '''
+        if model=='HKY85':
+            return self.execute_hky85_model()
+        elif model=='GTR':
+            return self.execute_gtr_model()
+        elif model=='WAG':
+            return self.execute_wag_model()
+        elif model=='LG':
+            return self.execute_lg_model()
+        elif model=='JTT':
+            return self.execute_jtt_model()
+        else:
+            raise Exception(f'Bug! The model "{model}" is not implemented by paHMM.')
+
+
     @staticmethod
     def _path_to_bytes(path: Union[Path, AnyStr]) -> bytes:
         """Used to convert strings and bytearrays to bytes-objects.
@@ -76,7 +97,7 @@ class BandingEstimator:
             sequences = _lib.ebc_be_execute_gtr_model(self.__be, arg1, arg2, arg3, arg4, arg5)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not execute GTR model.", self.__be)
+            raise PAHMMError("Could not apply GTR model.", self.__be)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
@@ -97,7 +118,7 @@ class BandingEstimator:
             sequences = _lib.ebc_be_execute_hky85_model(self.__be, arg)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not execute HKY85 model.", self.__be)
+            raise PAHMMError("Could not apply HKY85 model.", self.__be)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
@@ -113,7 +134,7 @@ class BandingEstimator:
         sequences = _lib.ebc_be_execute_jtt_model(self.__be)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not execute JTT model.", self.__be)
+            raise PAHMMError("Could not apply JTT model.", self.__be)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
@@ -129,7 +150,7 @@ class BandingEstimator:
         sequences = _lib.ebc_be_execute_lg_model(self.__be)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not execute LG model.", self.__be)
+            raise PAHMMError("Could not apply LG model.", self.__be)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
@@ -145,7 +166,7 @@ class BandingEstimator:
         sequences = _lib.ebc_be_execute_wag_model(self.__be)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not execute WAG model.", self.__be)
+            raise PAHMMError("Could not apply WAG model.", self.__be)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
@@ -211,7 +232,7 @@ class BandingEstimator:
         result: bool = _lib.ebc_be_set_input_from_file(self.__be, fasta_path)
 
         if not result:
-            raise PAHMMError("Could not read FASTA file input.", self.__be)
+            raise PAHMMError(f"Could not read sequences from {fasta_path}.", self.__be)
 
 
 class Sequences:
@@ -254,4 +275,3 @@ class Sequences:
         """Get a sequence using its name.
         """
         return _ffi.string(_lib.ebc_seq_get_sequence_from_name(self._seq, seq_name))
-
