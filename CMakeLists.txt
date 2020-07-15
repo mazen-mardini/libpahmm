@@ -87,7 +87,7 @@ if (UNIX)
             DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
 endif ()
 
-# Setup the tests
-add_subdirectory(test)
+# Setup the examples
+add_subdirectory(examples)
 
 

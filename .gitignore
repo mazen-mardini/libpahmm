@@ -75,10 +75,13 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
-# build directories
+# build files
 build/*
 python/python_pahmm.egg-info/*
 dist/*
 python/*.so
 python/pahmm/*.so
 python/pahmm/*.dylib
+tests/HMM_*
+tests/samples/amino_acid/*.distmat
+tests/samples/nucleotide/*.distmat

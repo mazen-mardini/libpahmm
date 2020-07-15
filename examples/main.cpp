@@ -176,11 +176,14 @@ SSLTQSSKDDEILSMIAIVGDACIDWRSHIVSFSYIHVLTVTSNLSGINF
 >H35
 SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
 )SEQ");
-    //ebc_be_set_input_from_file(be, "nonsense50x70.fasta");
+
+    ebc_be_set_alpha(be, 0.6);
+    ebc_be_set_categories(be, 2);
 
     EBCSequences *seq = ebc_be_execute_jtt_model(be);
     cout << ebc_be_last_error_msg(be) << endl;
     unsigned int seqCount = ebc_seq_count(seq);
+
 
     cout << seqCount << endl;
     for (unsigned int seqId1 = 0; seqId1 < seqCount; seqId1++)
