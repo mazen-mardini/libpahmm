@@ -124,6 +124,9 @@ For reasons I don't understand, CMake could not find the `libpng` include files 
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/include
 ```
 
+## Tests
+There are tests you can run if you wish to verify the correctness of the library output, the test-suite can be found under `tests/`. They verify that the output from the library match the output from the pahmm-tree tool. You need to have the pahmm Python library installed before you run the tests.
+
 
 ## License
 Libpahmm and paHMM-Tree are licensed under the GNU General Public License version 3.0 (GPLv3).
