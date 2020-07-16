@@ -87,3 +87,4 @@ tests/samples/amino_acid/*.distmat
 tests/samples/nucleotide/*.distmat
 tests/paHMM-dist/paHMM-tree_*
 tests/paHMM-dist/last_run_system.txt
+.eggs/*

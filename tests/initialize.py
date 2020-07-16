@@ -6,6 +6,7 @@ from typing import Union, List
 import sys
 from os import PathLike, symlink
 import platform
+from multiprocessing import cpu_count
 
 
 # Path to paHMM-tree directory
@@ -75,7 +76,7 @@ def initialize(verbose: bool = False) -> bool:
             if run2(["make", "clean"], PAHMM_TREE_DIR, verbose).returncode:
                 return False
 
-        if run2(["make"], PAHMM_TREE_DIR, verbose).returncode:
+        if run2(["make", "-j", str(cpu_count())], PAHMM_TREE_DIR, verbose).returncode:
             return False
 
         if platform.system() != "Windows":
