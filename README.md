@@ -87,9 +87,9 @@ To compile libpahmm you'll need to install `CMake`. This can be done with the fo
 ```shell script
 sudo apt install cmake
 ```
-On MacOS I'd recommend using [Brew](https://brew.sh "Homebrew website") for easy installation, and apart from `CMake` you'll need to have `libpng` installed:
+On MacOS I'd recommend using [Brew](https://brew.sh "Homebrew website") for easy installation:
 ```shell script
-brew install cmake libpng
+brew install cmake
 ```
 
 Then navigate to "libpahmm/", and enter the following command to build for Python 3:
@@ -116,12 +116,6 @@ cat install_manifest.txt
 If everything you want to remove is listed in the file, then run the following command:
 ```shell script
 sudo xargs rm < install_manifest.txt
-```
-### Compilation problems on MacOS?
-
-For reasons I don't understand, CMake could not find the `libpng` include files on my Mac, even though the library is there. The simplest way to solve that was to extend the C++ include path before installing:
-```shell script
-export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/include
 ```
 
 ## Tests
