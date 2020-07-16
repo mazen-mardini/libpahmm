@@ -22,6 +22,7 @@ from setuptools.command.develop import develop
 from setuptools.command.install import install
 from setuptools.command.sdist import sdist
 from setuptools.command.bdist_egg import bdist_egg
+from setuptools.command.bdist_wheel import bdist_wheel
 from subprocess import run
 from python.paths import *
 from shutil import copyfile
@@ -73,11 +74,18 @@ class PreSdistCommand(sdist):
 		sdist.run(self)
 
 
-class PreBdistCommand(bdist_egg):
+class PreBdistEggCommand(bdist_egg):
 	"""Pre-installation for binary distribution (egg) mode."""
 	def run(self):
 		build()
 		bdist_egg.run(self)
+
+
+class PreBdistWheelCommand(bdist_wheel):
+	"""Pre-installation for binary distribution (wheel) mode."""
+	def run(self):
+		build()
+		bdist_wheel.run(self)
 
 
 if __name__ == "__main__":
@@ -99,19 +107,21 @@ if __name__ == "__main__":
 		packages=setuptools.find_packages('python'),
 		package_dir={'': 'python'},
 		classifiers=[
-			"Topic :: System :: Archiving",
+			"Topic :: Scientific/Engineering :: Bio-Informatics",
 			"Programming Language :: Python :: 3",
 			"Programming Language :: C",
 			"Natural Language :: English",
 			"License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-			"Operating System :: OS Independent",
+			"Operating System :: POSIX :: Linux",
+			"Operating System :: MacOS",
 		],
 		setup_requires=requirements,
 		cmdclass={
 			'develop': PreDevelopCommand,
 			'install': PreInstallCommand,
 			'sdist': PreSdistCommand,
-			'bdist_egg': PreBdistCommand,
+			'bdist_egg': PreBdistEggCommand,
+			'bdist_wheel': PreBdistWheelCommand,
 		},
 		cffi_modules=["python/python-pahmm-build.py:ffibuilder"],
 		install_requires=requirements,
