@@ -25,6 +25,7 @@ from setuptools.command.bdist_egg import bdist_egg
 from subprocess import run
 from python.paths import *
 from shutil import copyfile
+from multiprocessing import cpu_count
 import sys
 
 
@@ -45,9 +46,9 @@ def build(force: bool = False):
 		if not pahmm_install_prefix_dir.exists():
 			pahmm_install_prefix_dir.mkdir()
 
-		run(["cmake", "-DBUILD_STATIC=OFF", "-DCMAKE_BUILD_TYPE=Debug", ".."],
+		run(["cmake", "-DBUILD_STATIC=OFF", ".."],
 			cwd=str(pahmm_build_dir), check=True)
-		run(["make"], cwd=str(pahmm_build_dir), check=True)
+		run(["make", "-j", str(cpu_count())], cwd=str(pahmm_build_dir), check=True)
 		copyfile(str(pahmm_build_dir / ("libpahmm." + lib_extension)), "python/pahmm/libpahmm." + lib_extension)
 
 

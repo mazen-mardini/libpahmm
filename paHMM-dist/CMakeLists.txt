@@ -35,12 +35,27 @@ file(GLOB SOURCE_PATHS
     "src/models/*.cpp"
 )
 
+# Settings for dlib
+# These settings will disable unused features. You may reintroduce these features,
+# but remember that this might imply more external dependencies which might reduce
+# portability.
+set(DLIB_PNG_SUPPORT OFF)
+set(DLIB_GIF_SUPPORT OFF)
+set(DLIB_JPEG_SUPPORT OFF)
+set(DLIB_USE_BLAS OFF)       # Might impact performance, to use BLAS reenable this.
+set(DLIB_USE_LAPACK OFF)     # Might impact performance, to use LAPACK reenable this.
+set(DLIB_USE_MKL_FFT OFF)    # Might impact performance, to use MKL_FFT reenable this.
+set(DLIB_USE_CUDA OFF)       # Might impact performance, to use CUDA reenable this (Nvidia GPU only).
+set(DLIB_NO_GUI_SUPPORT ON)
+# This MUST be on:
+set(DLIB_DISABLE_ASSERTS ON)
+
+# Include dlib
 add_subdirectory(dlib)
 
 # Settings for dlib
 set_property(TARGET dlib PROPERTY CXX_STANDARD 11)
-add_definitions(-DDLIB_NO_GUI_SUPPORT)
-add_definitions(-DDLIB_DISABLE_ASSERTS)
+#add_definitions(-DDLIB_DISABLE_ASSERTS)
 
 add_library(paHMM-dist STATIC ${SOURCE_PATHS} dlib/dlib/all/source.cpp)
 target_link_libraries(paHMM-dist PRIVATE dlib)
