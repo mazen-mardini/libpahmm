@@ -22,7 +22,6 @@ from setuptools.command.develop import develop
 from setuptools.command.install import install
 from setuptools.command.sdist import sdist
 from setuptools.command.bdist_egg import bdist_egg
-from setuptools.command.bdist_wheel import bdist_wheel
 from subprocess import run
 from python.paths import *
 from shutil import copyfile
@@ -81,13 +80,6 @@ class PreBdistEggCommand(bdist_egg):
 		bdist_egg.run(self)
 
 
-class PreBdistWheelCommand(bdist_wheel):
-	"""Pre-installation for binary distribution (wheel) mode."""
-	def run(self):
-		build()
-		bdist_wheel.run(self)
-
-
 if __name__ == "__main__":
 	with open("README.md", "r") as fh:
 		long_description = fh.read()
@@ -121,7 +113,6 @@ if __name__ == "__main__":
 			'install': PreInstallCommand,
 			'sdist': PreSdistCommand,
 			'bdist_egg': PreBdistEggCommand,
-			'bdist_wheel': PreBdistWheelCommand,
 		},
 		cffi_modules=["python/python-pahmm-build.py:ffibuilder"],
 		install_requires=requirements,
