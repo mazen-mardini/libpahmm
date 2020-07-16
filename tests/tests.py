@@ -93,15 +93,18 @@ AMINO_ACID_TESTS = [
 
 def read_distmat(distmat_path: str):
     adjacency_list = []
+    
+    try:
+        with open(distmat_path, "rb") as distmat_file:
+            seqs_count = int(distmat_file.readline())
 
-    with open(distmat_path, "rb") as distmat_file:
-        seqs_count = int(distmat_file.readline())
-
-        for i in range(seqs_count):
-            parts = distmat_file.readline().split()
-            seq_name = parts[0]
-            distances = list(map(float, parts[1:]))
-            adjacency_list.append((seq_name, distances))
+            for i in range(seqs_count):
+                parts = distmat_file.readline().split()
+                seq_name = parts[0]
+                distances = list(map(float, parts[1:]))
+                adjacency_list.append((seq_name, distances))
+    except FileNotFoundError:
+        return []
 
     return adjacency_list
 
