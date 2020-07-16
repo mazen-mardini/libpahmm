@@ -111,7 +111,7 @@ if __name__ == "__main__":
 			"Programming Language :: Python :: 3",
 			"Programming Language :: C",
 			"Natural Language :: English",
-			"License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+			"License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
 			"Operating System :: POSIX :: Linux",
 			"Operating System :: MacOS",
 		],
