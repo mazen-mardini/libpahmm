@@ -9,7 +9,7 @@ find evolutionary distances between a set of sequences of nucleotides or amino-a
 (such as DNA, RNA, proteins, etc.). 
 The library lets you configure the way distance calculations are made. These distances can 
 then be used to create [phylogenetic trees](https://en.wikipedia.org/wiki/Phylogenetic_tree) 
-and visualize the genetic relationship between various organisms.
+and visualize the genetic relationship between various sequence samples.
 
 ## Why use libpahmm?
 - It allows for more accurate distance calculations that take into account multiple substitutions 
