@@ -1,6 +1,7 @@
 # Tests to confirm that pahmm yields the same output as the
 # pahmm-tree tool.
 
+
 from initialize import *
 from pahmm import *
 import os
@@ -136,7 +137,7 @@ def test_fasta(fasta_path: str, model: str, parameters: List[float],
     """
 
     # Get paHMM-tree tool distances
-    command_line = ["./" + PAHMM_TREE_EXEC_NAME, "--in", fasta_path, TOOL_MODEL_FLAGS[model]]
+    command_line = [str(TESTS_PATH / PAHMM_TREE_EXEC_NAME), "--in", fasta_path, TOOL_MODEL_FLAGS[model]]
 
     if parameters:
         command_line.append(TOOL_MODEL_PARAM_FLAGS[model])

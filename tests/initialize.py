@@ -1,4 +1,4 @@
-__all__ = ["initialize", "PAHMM_TREE_EXEC_NAME", "run2"]
+__all__ = ["initialize", "PAHMM_TREE_EXEC_NAME", "TESTS_PATH", "run2"]
 
 from subprocess import run, PIPE, CompletedProcess
 from pathlib import Path
@@ -8,6 +8,9 @@ from os import PathLike, symlink
 import platform
 from multiprocessing import cpu_count
 
+
+# Path to tests directory
+TESTS_PATH = Path(__file__).parent.absolute()
 
 # Path to paHMM-tree directory
 # This directory contains: dlib, src, Makefile, etc.

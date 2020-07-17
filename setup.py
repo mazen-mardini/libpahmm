@@ -18,21 +18,29 @@
 ##==============================================================================
 
 import setuptools
+import distutils.command.build as b
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 from setuptools.command.sdist import sdist
 from setuptools.command.bdist_egg import bdist_egg
+import distutils.command.clean as cl
 from subprocess import run
 from python.paths import *
-from shutil import copyfile
+from shutil import copyfile, rmtree
 from multiprocessing import cpu_count
-import sys
+import platform
 
+SOURCE_PATH = Path(__file__).parent.absolute()
 
-if sys.platform.startswith('linux'):
+if platform.system() == "Linux":
 	lib_extension = "so"
-elif sys.platform.startswith('darwin'):
+elif platform.system() == "Darwin":
 	lib_extension = "dylib"
+elif platform.system() == "Windows":
+	lib_extension = "dll"
+else:
+	lib_extension = "so"
+
 
 def build(force: bool = False):
 	"""
@@ -50,6 +58,13 @@ def build(force: bool = False):
 			cwd=str(pahmm_build_dir), check=True)
 		run(["make", "-j", str(cpu_count())], cwd=str(pahmm_build_dir), check=True)
 		copyfile(str(pahmm_build_dir / ("libpahmm." + lib_extension)), "python/pahmm/libpahmm." + lib_extension)
+
+
+class PreBuildCommand(b.build):
+	"""Pre-installation for development mode."""
+	def run(self):
+		build(force = True)
+		b.build.run(self)
 
 
 class PreDevelopCommand(develop):
@@ -78,6 +93,45 @@ class PreBdistEggCommand(bdist_egg):
 	def run(self):
 		build()
 		bdist_egg.run(self)
+
+
+class PostCleanCommand(cl.clean):
+	"""Post-routines after cleaning."""
+	def run(self):
+		cl.clean.run(self)
+		self.safe_remove(Path(".eggs"))
+		self.safe_remove(Path("build"))
+		self.safe_remove(Path("dist"))
+		self.safe_remove(Path("python/_pahmm_cffi.abi3.so"))
+		self.safe_remove(Path("python/python_pahmm.egg-info"))
+		self.safe_remove(Path("python/pahmm/libpahmm." + lib_extension))
+
+	@staticmethod
+	def safe_remove(path: Path, preserve_root=False):
+		"""Safely removes a tree path.
+
+		It does so by ensuring that the path leads to an inode within
+		the source directory.
+		"""
+		path = path.absolute()
+
+		if not path.exists():
+			return
+
+		relative_path = path.relative_to(SOURCE_PATH)
+
+		if SOURCE_PATH not in path.parents:
+			raise RuntimeError("Unsafe operation. Cannot not remove inode outside of source path: " + str(path))
+
+		if path.is_dir():
+			print(f"removing '{str(relative_path)}' (and everything under it)")
+			rmtree(path)
+
+			if preserve_root:
+				path.mkdir()
+		else:
+			print(f"removing '{str(relative_path)}'")
+			path.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":
@@ -109,10 +163,12 @@ if __name__ == "__main__":
 		],
 		setup_requires=requirements,
 		cmdclass={
+			'build': PreBuildCommand,
 			'develop': PreDevelopCommand,
 			'install': PreInstallCommand,
 			'sdist': PreSdistCommand,
 			'bdist_egg': PreBdistEggCommand,
+			'clean': PostCleanCommand
 		},
 		cffi_modules=["python/python-pahmm-build.py:ffibuilder"],
 		install_requires=requirements,
