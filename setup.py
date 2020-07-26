@@ -121,7 +121,7 @@ class PostCleanCommand(cl.clean):
 		relative_path = path.relative_to(SOURCE_PATH)
 
 		if SOURCE_PATH not in path.parents:
-			raise RuntimeError("Unsafe operation. Cannot not remove inode outside of source path: " + str(path))
+			raise RuntimeError("Unsafe operation. Cannot remove inode outside of source directory: " + str(path))
 
 		if path.is_dir():
 			print(f"removing '{str(relative_path)}' (and everything under it)")

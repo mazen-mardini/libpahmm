@@ -99,6 +99,72 @@ EBCSequences *ebc_seq_create(EBCBandingEstimator *be, Definitions::ModelType mod
                                  indelParams, substParams, Definitions::OptimizationType::BFGS,
                                  be->gamma_rate_categories, be->alpha, tme->getGuideTree());
     seq->_bandingEstimator = bandingEstimator;
+    seq->_ebcBandingEstimator = be;
 
     return seq;
+}
+
+void ebc_be_set_error(EBCBandingEstimator *be, const string &message)
+{
+    if (!be) {
+        return;
+    }
+
+    HmmException *& error = reinterpret_cast<HmmException *&>(be->_error);
+
+    if (!error) {
+        error = new HmmException(message);
+    } else {
+        *error = HmmException(message);
+    }
+}
+
+void ebc_be_set_error(EBCBandingEstimator *be, const HmmException &exception)
+{
+    if (!be) {
+        return;
+    }
+
+    HmmException *& error = reinterpret_cast<HmmException *&>(be->_error);
+
+    if (!error) {
+        error = new HmmException(exception);
+    } else {
+        *error = exception;
+    }
+}
+
+void ebc_be_unset_error(EBCBandingEstimator *be)
+{
+    if (!be) {
+        return;
+    }
+
+    HmmException *& error = reinterpret_cast<HmmException *&>(be->_error);
+
+    if (error) {
+        delete error;
+        error = nullptr;
+    }
+}
+
+void ebc_seq_set_error(EBCSequences *seq, const string &message)
+{
+    if (seq) {
+        return ebc_be_set_error(seq->_ebcBandingEstimator, message);
+    }
+}
+
+void ebc_seq_set_error(EBCSequences *seq, const HmmException &exception)
+{
+    if (seq) {
+        return ebc_be_set_error(seq->_ebcBandingEstimator, exception);
+    }
+}
+
+void ebc_seq_unset_error(EBCSequences *seq)
+{
+    if (seq) {
+        return ebc_be_unset_error(seq->_ebcBandingEstimator);
+    }
 }

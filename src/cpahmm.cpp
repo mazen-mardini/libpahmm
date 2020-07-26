@@ -38,7 +38,7 @@ EBCBandingEstimator *ebc_be_create()
 {
     EBCBandingEstimator *be = new EBCBandingEstimator;
     be->_parser = nullptr;
-    be->_error = new HmmException;
+    be->_error = nullptr;
     be->indel_NB_probability = EBC_BE_DEFAULTS_INDEL_NB_PROBABILITY;
     be->indel_rate = EBC_BE_DEFAULTS_INDEL_RATE;
     be->alpha = EBC_BE_DEFAULTS_ALPHA;
@@ -69,7 +69,7 @@ void ebc_be_free(EBCBandingEstimator *be)
 
 const char *ebc_be_last_error_msg(EBCBandingEstimator *be)
 {
-    if (!be) {
+    if (!be || !be->_error) {
         return nullptr;
     }
 
@@ -84,10 +84,12 @@ EBCSequences *ebc_be_execute_gtr_model(EBCBandingEstimator *be, double param1, d
             return nullptr;
         }
 
-        return ebc_seq_create(be, Definitions::ModelType::GTR, false, 5,
-                              param1, param2, param3, param4, param5);
+        EBCSequences *sequences = ebc_seq_create(be, Definitions::ModelType::GTR, false, 5,
+                                                 param1, param2, param3, param4, param5);
+        ebc_be_unset_error(be);
+        return sequences;
     } catch (HmmException& e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return nullptr;
     }
 }
@@ -99,9 +101,11 @@ EBCSequences *ebc_be_execute_gtr_modelv2(EBCBandingEstimator *be)
             return nullptr;
         }
 
-        return ebc_seq_create(be, Definitions::ModelType::GTR, true, 0);
+        EBCSequences *sequences = ebc_seq_create(be, Definitions::ModelType::GTR, true, 0);
+        ebc_be_unset_error(be);
+        return sequences;
     } catch (HmmException& e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return nullptr;
     }
 }
@@ -113,9 +117,11 @@ EBCSequences *ebc_be_execute_hky85_model(EBCBandingEstimator *be, double param)
             return nullptr;
         }
 
-        return ebc_seq_create(be, Definitions::ModelType::HKY85, false, 1, param);
+        EBCSequences *sequences = ebc_seq_create(be, Definitions::ModelType::HKY85, false, 1, param);
+        ebc_be_unset_error(be);
+        return sequences;
     } catch (HmmException& e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return nullptr;
     }
 }
@@ -127,9 +133,11 @@ EBCSequences *ebc_be_execute_hky85_modelv2(EBCBandingEstimator *be)
             return nullptr;
         }
 
-        return ebc_seq_create(be, Definitions::ModelType::HKY85, true, 0);
+        EBCSequences *sequences = ebc_seq_create(be, Definitions::ModelType::HKY85, true, 0);
+        ebc_be_unset_error(be);
+        return sequences;
     } catch (HmmException& e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return nullptr;
     }
 }
@@ -141,9 +149,11 @@ EBCSequences *ebc_be_execute_jtt_model(EBCBandingEstimator *be)
             return nullptr;
         }
 
-        return ebc_seq_create(be, Definitions::ModelType::JTT, true, 0);
+        EBCSequences *sequences = ebc_seq_create(be, Definitions::ModelType::JTT, true, 0);
+        ebc_be_unset_error(be);
+        return sequences;
     } catch (HmmException& e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return nullptr;
     }
 }
@@ -155,9 +165,11 @@ EBCSequences *ebc_be_execute_lg_model(EBCBandingEstimator *be)
             return nullptr;
         }
 
-        return ebc_seq_create(be, Definitions::ModelType::LG, true, 0);
+        EBCSequences *sequences = ebc_seq_create(be, Definitions::ModelType::LG, true, 0);
+        ebc_be_unset_error(be);
+        return sequences;
     } catch (HmmException& e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return nullptr;
     }
 }
@@ -169,9 +181,11 @@ EBCSequences *ebc_be_execute_wag_model(EBCBandingEstimator *be)
             return nullptr;
         }
 
-        return ebc_seq_create(be, Definitions::ModelType::WAG, true, 0);
+        EBCSequences *sequences = ebc_seq_create(be, Definitions::ModelType::WAG, true, 0);
+        ebc_be_unset_error(be);
+        return sequences;
     } catch (HmmException& e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return nullptr;
     }
 }
@@ -185,6 +199,8 @@ void ebc_be_set_indel_parameters(EBCBandingEstimator *be, double NB_probability,
     be->estimate_indel_params = false;
     be->indel_NB_probability = NB_probability;
     be->indel_rate = rate;
+
+    ebc_be_unset_error(be);
 }
 
 void ebc_be_unset_indel_parameters(EBCBandingEstimator *be)
@@ -196,6 +212,8 @@ void ebc_be_unset_indel_parameters(EBCBandingEstimator *be)
     be->estimate_indel_params = true;
     be->indel_NB_probability = EBC_BE_DEFAULTS_INDEL_NB_PROBABILITY;
     be->indel_rate = EBC_BE_DEFAULTS_INDEL_RATE;
+
+    ebc_be_unset_error(be);
 }
 
 void ebc_be_set_alpha(EBCBandingEstimator *be, double alpha)
@@ -206,6 +224,8 @@ void ebc_be_set_alpha(EBCBandingEstimator *be, double alpha)
 
     be->estimate_alpha = false;
     be->alpha = alpha;
+
+    ebc_be_unset_error(be);
 }
 
 void ebc_be_unset_alpha(EBCBandingEstimator *be)
@@ -216,6 +236,8 @@ void ebc_be_unset_alpha(EBCBandingEstimator *be)
 
     be->estimate_alpha = true;
     be->alpha = EBC_BE_DEFAULTS_ALPHA;
+
+    ebc_be_unset_error(be);
 }
 
 void ebc_be_set_categories(EBCBandingEstimator *be, unsigned int categories)
@@ -226,6 +248,8 @@ void ebc_be_set_categories(EBCBandingEstimator *be, unsigned int categories)
 
     be->estimate_categories = false;
     be->gamma_rate_categories = categories;
+
+    ebc_be_unset_error(be);
 }
 
 void ebc_be_unset_categories(EBCBandingEstimator *be)
@@ -236,6 +260,8 @@ void ebc_be_unset_categories(EBCBandingEstimator *be)
 
     be->estimate_categories = true;
     be->gamma_rate_categories = EBC_BE_DEFAULTS_GAMMA_RATE_CATEGORIES;
+
+    ebc_be_unset_error(be);
 }
 
 bool ebc_be_set_input(EBCBandingEstimator *be, const char *fasta)
@@ -254,10 +280,11 @@ bool ebc_be_set_input(EBCBandingEstimator *be, const char *fasta)
     try {
         be->_parser = new StreamParser(inputStream);
     } catch (HmmException &e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return false;
     }
 
+    ebc_be_unset_error(be);
     return true;
 }
 
@@ -277,10 +304,11 @@ bool ebc_be_set_input_from_file(EBCBandingEstimator *be, const char *file_name)
     try {
         be->_parser = new StreamParser(inputStream);
     } catch (HmmException &e) {
-        *reinterpret_cast<HmmException *>(be->_error) = e;
+        ebc_be_set_error(be, e);
         return false;
     }
 
+    ebc_be_unset_error(be);
     return true;
 }
 
@@ -315,28 +343,49 @@ double ebc_seq_get_distance(EBCSequences *seq, unsigned int seq_id1, unsigned in
     EBC::Sequences * sequences = reinterpret_cast<EBC::Sequences *>(seq->_sequences);
     unsigned int size = sequences->getSequenceCount();
 
+    if (seq_id1 >= size) {
+        ebc_seq_set_error(seq, string("Sequence with ID ") + to_string(seq_id1) + " not found.");
+        return NAN;
+    }
+
+    if (seq_id2 >= size) {
+        ebc_seq_set_error(seq, string("Sequence with ID ") + to_string(seq_id2) + " not found.");
+        return NAN;
+    }
+
     if (seq_id1 > seq_id2) {
         // Swap if they are in an inconvenient order for the calculations below.
         unsigned int tmp = seq_id1;
         seq_id1 = seq_id2;
         seq_id2 = tmp;
     } else if (seq_id1 == seq_id2) {
+        ebc_seq_unset_error(seq);
         return 0.0;
     }
 
-    /*
-     * The distances stored inside paHMM are the elements in an upper-triangular
-     * distance matrix (excluding the diagonal). They are actually stored in a list,
-     * starting from the first row of the distance matrix, from left to right.
-     *
-     * We have to figure out which element in the list correspond to the distance
-     * between the given sequences.
-     *
-     * The following formula gives us the right index: ((2s - 3)*i - i^2)/2 + j - 1
-     * where s is the total number of sequences and (i,j) is a position on the
-     * distance matrix's upper-triangular part.
-     */
-    return be->optimizePair(((2*size-3) * seq_id1 - seq_id1*seq_id1)/2 + seq_id2 - 1);
+    double distance;
+
+    try {
+        /*
+         * The distances stored inside paHMM are the elements in an upper-triangular
+         * distance matrix (excluding the diagonal). They are actually stored in a list,
+         * starting from the first row of the distance matrix, from left to right.
+         *
+         * We have to figure out which element in the list correspond to the distance
+         * between the given sequences.
+         *
+         * The following formula gives us the right index: ((2s - 3)*i - i^2)/2 + j - 1
+         * where s is the total number of sequences and (i,j) is a position on the
+         * distance matrix's upper-triangular part.
+         */
+        distance = be->optimizePair(((2*size-3) * seq_id1 - seq_id1*seq_id1)/2 + seq_id2 - 1);
+    }  catch (HmmException &error) {
+        ebc_seq_set_error(seq, error);
+        return NAN;
+    }
+
+    ebc_seq_unset_error(seq);
+    return distance;
 }
 
 double ebc_seq_get_distance_from_names(EBCSequences *seq,
@@ -346,11 +395,19 @@ double ebc_seq_get_distance_from_names(EBCSequences *seq,
         return NAN;
     }
 
-    return ebc_seq_get_distance(seq,
-                reinterpret_cast<EBC::Sequences *>(seq->_sequences)
-                                ->getSequenceIdFromCString(seq_name1),
-                reinterpret_cast<EBC::Sequences *>(seq->_sequences)
-                                ->getSequenceIdFromCString(seq_name2));
+    int seq_id1, seq_id2;
+
+    try {
+        seq_id1 = reinterpret_cast<EBC::Sequences *>(seq->_sequences)
+                ->getSequenceIdFromCString(seq_name1);
+        seq_id2 = reinterpret_cast<EBC::Sequences *>(seq->_sequences)
+                ->getSequenceIdFromCString(seq_name2);
+    } catch (HmmException &error) {
+        ebc_seq_set_error(seq, error);
+        return NAN;
+    }
+
+    return ebc_seq_get_distance(seq, seq_id1, seq_id2);
 }
 
 const char *ebc_seq_get_name(EBCSequences *seq, unsigned int seq_id)
@@ -359,7 +416,15 @@ const char *ebc_seq_get_name(EBCSequences *seq, unsigned int seq_id)
         return nullptr;
     }
 
-    return reinterpret_cast<EBC::Sequences *>(seq->_sequences)->getSequenceName(seq_id).c_str();
+    EBC::Sequences *sequences = reinterpret_cast<EBC::Sequences *>(seq->_sequences);
+
+    if (seq_id >= sequences->getSequenceCount()) {
+        ebc_seq_set_error(seq, string("Sequence with ID ") + to_string(seq_id) + " not found.");
+        return nullptr;
+    }
+
+    ebc_seq_unset_error(seq);
+    return sequences->getSequenceName(seq_id).c_str();
 }
 
 const char *ebc_seq_get_sequence(EBCSequences *seq, unsigned int seq_id)
@@ -371,9 +436,11 @@ const char *ebc_seq_get_sequence(EBCSequences *seq, unsigned int seq_id)
     EBC::Sequences * sequences = reinterpret_cast<EBC::Sequences *>(seq->_sequences);
 
     if (seq_id >= sequences->getSequenceCount()) {
+        ebc_seq_set_error(seq, string("Sequence with ID ") + to_string(seq_id) + " not found.");
         return nullptr;
     }
 
+    ebc_seq_unset_error(seq);
     return sequences->getRawSequenceAt(seq_id).c_str();
 }
 
@@ -383,8 +450,17 @@ const char *ebc_seq_get_sequence_from_name(EBCSequences *seq, const char *seq_na
         return nullptr;
     }
 
-    return ebc_seq_get_sequence(seq, reinterpret_cast<EBC::Sequences *>(seq->_sequences)
-                                ->getSequenceIdFromCString(seq_name));
+    int seq_id;
+
+    try {
+        seq_id = reinterpret_cast<EBC::Sequences *>(seq->_sequences)
+                ->getSequenceIdFromCString(seq_name);
+    } catch (HmmException &error) {
+        ebc_seq_set_error(seq, error);
+        return nullptr;
+    }
+
+    return ebc_seq_get_sequence(seq, seq_id);
 }
 
 }

@@ -63,8 +63,6 @@ set(DLIB_USE_LAPACK OFF)     # Might impact performance, to use LAPACK reenable 
 set(DLIB_USE_MKL_FFT OFF)    # Might impact performance, to use MKL_FFT reenable this.
 set(DLIB_USE_CUDA OFF)       # Might impact performance, to use CUDA reenable this (Nvidia GPU only).
 set(DLIB_NO_GUI_SUPPORT ON)
-# This MUST be on:
-set(DLIB_DISABLE_ASSERTS ON)
 
 # Add dependencies
 add_subdirectory(dlib)
@@ -74,7 +72,7 @@ add_subdirectory(paHMM-dist)
 set_property(TARGET dlib PROPERTY CXX_STANDARD 11)
 #add_definitions(-DDLIB_NO_GUI_SUPPORT)
 # Because something is turning it on, we have to turn it off:
-#add_definitions(-DDLIB_DISABLE_ASSERTS)
+add_definitions(-DDLIB_DISABLE_ASSERTS)
 
 target_link_libraries(pahmm PRIVATE paHMM-dist dlib)
 

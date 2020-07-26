@@ -21,14 +21,26 @@
 #define CPAHMM_P_H
 
 #include "core/Definitions.hpp"
+#include <string>
 
 struct EBCSequences;
 struct EBCBandingEstimator;
+
+namespace EBC {
+class HmmException;
+}
 
 /*
  * Creates a Sequence, executes a model, and stores the result all at once!
  */
 EBCSequences *ebc_seq_create(EBCBandingEstimator *be, EBC::Definitions::ModelType model,
                              bool estimate_model_params, int model_param_count, ...);
+
+void ebc_be_set_error(EBCBandingEstimator *be, const string &message);
+void ebc_be_set_error(EBCBandingEstimator *be, const EBC::HmmException &exception);
+void ebc_be_unset_error(EBCBandingEstimator *be);
+void ebc_seq_set_error(EBCSequences *seq, const string &message);
+void ebc_seq_set_error(EBCSequences *seq, const EBC::HmmException &exception);
+void ebc_seq_unset_error(EBCSequences *seq);
 
 #endif // CPAHMM_P_H

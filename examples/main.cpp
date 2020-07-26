@@ -165,7 +165,7 @@ SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
 int test_c_api()
 {
     EBCBandingEstimator *be = ebc_be_create();
-    ebc_be_set_input(be, R"SEQ(>H0
+    /*ebc_be_set_input(be, R"SEQ(>H0
 ENVVDDTSDRPTICQKWNTTSAAISKYDFLSFYPHYRPASVETFLNLLLK
 >H4
 ENVVDDKSDRPTICQKWNATSAAISKYNFLEFYPHVRTASVEMFLNLLLK
@@ -175,15 +175,38 @@ SPATQSSKDDALLSMAATVGEASLDKRSHIFSFPSMHVRTVTSDLSGLAF
 SSLTQSSKDDEILSMIAIVGDACIDWRSHIVSFSYIHVLTVTSNLSGINF
 >H35
 SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
-)SEQ");
+)SEQ");*/
+    ebc_be_set_input(be,
+     R"SEQ(>random sequence 1 consisting of 10 bases.
+ccgaaaacta
+>random sequence 2 consisting of 10 bases.
+ccagggggaa
+>random sequence 3 consisting of 10 bases.
+gggcactcga
+>random sequence 4 consisting of 10 bases.
+gagttgaacc
+>random sequence 5 consisting of 10 bases.
+gtttaatacc
+>random sequence 6 consisting of 10 bases.
+ttgagaatat
+>random sequence 7 consisting of 10 bases.
+ttgtggacaa
+>random sequence 8 consisting of 10 bases.
+aattaggata
+>random sequence 9 consisting of 10 bases.
+ccgtaatagg
+>random sequence 10 consisting of 10 bases.
+gctagaatct)SEQ");
 
-    ebc_be_set_alpha(be, 0.6);
-    ebc_be_set_categories(be, 2);
+    //ebc_be_set_alpha(be, 0.6);
+    //ebc_be_set_categories(be, 2);
 
-    EBCSequences *seq = ebc_be_execute_jtt_model(be);
-    cout << ebc_be_last_error_msg(be) << endl;
+    //EBCSequences *seq = ebc_be_execute_jtt_model(be);
+    EBCSequences *seq = ebc_be_execute_hky85_model(be, 0.1);
+    if (const char *errMsg = ebc_be_last_error_msg(be)) {
+        cout << errMsg << endl;
+    }
     unsigned int seqCount = ebc_seq_count(seq);
-
 
     cout << seqCount << endl;
     for (unsigned int seqId1 = 0; seqId1 < seqCount; seqId1++)
@@ -194,6 +217,11 @@ SKASQENKTDQLLKRDAIVGEACIDKKKHNFGYKSVRVRSVTTNLAGLAF
             cout << ebc_seq_get_distance(seq, seqId1, seqId2) << " ";
         }
         cout << endl;
+    }
+
+    ebc_seq_get_distance_from_names(seq, "Heh", "hehe");
+    if (const char *errMsg = ebc_be_last_error_msg(be)) {
+        cout << errMsg << endl;
     }
 
     // Clean up

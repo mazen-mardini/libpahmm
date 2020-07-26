@@ -51,16 +51,6 @@ extern "C"
 #define EBC_BE_DEFAULTS_GAMMA_RATE_CATEGORIES 4
 
     /*
-     * A set of sequences.
-     */
-    typedef struct PAHMM_EXPORT EBCSequences {
-        void *_sequences;
-        void *_modelEstimator;
-        void *_bandingEstimator;
-        int sequenceType;
-    } EBCSequences;
-
-    /*
      * The banding estimator used to load sequences from a string
      * or a file and create EBCSequences-objects.
      */
@@ -86,6 +76,16 @@ extern "C"
         bool estimate_categories;
     } EBCBandingEstimator;
 
+    /*
+     * A set of sequences.
+     */
+    typedef struct PAHMM_EXPORT EBCSequences {
+        void *_sequences;
+        void *_modelEstimator;
+        void *_bandingEstimator;
+        EBCBandingEstimator *_ebcBandingEstimator;
+        int sequenceType;
+    } EBCSequences;
 
     /*
      * Construct a banding estimator object.
@@ -183,6 +183,8 @@ extern "C"
     /*
      * Get the distance between two sequences.
      *
+     * If an error occurs, NAN is returned.
+     *
      * If the distance hasn't been calulated before, it will be calculated and the function
      * will return the result.
      */
@@ -190,6 +192,8 @@ extern "C"
 
     /*
      * Get the distance between two sequences using their names.
+     *
+     * If an error occurs, NAN is returned.
      *
      * If the distance hasn't been calulated before, it will be calculated and the function
      * will return the result.
@@ -200,6 +204,8 @@ extern "C"
     /*
      * Get the name of a sequence from a sequence ID.
      *
+     * If an error occurs, NULL is returned.
+     *
      * Note: You do not have to worry about freeing the return value, this is done by
      * ebc_seq_free().
      */
@@ -208,6 +214,8 @@ extern "C"
     /*
      * Get the sequence string from a sequence ID.
      *
+     * If an error occurs, NULL is returned.
+     *
      * Note: You do not have to worry about freeing the return value, this is done by
      * ebc_seq_free().
      */
@@ -215,6 +223,8 @@ extern "C"
 
     /*
      * Get the sequence string from a sequence name.
+     *
+     * If an error occurs, NULL is returned.
      *
      * Note: You do not have to worry about freeing the return value, this is done by
      * ebc_seq_free().

@@ -47,15 +47,13 @@ set(DLIB_USE_LAPACK OFF)     # Might impact performance, to use LAPACK reenable 
 set(DLIB_USE_MKL_FFT OFF)    # Might impact performance, to use MKL_FFT reenable this.
 set(DLIB_USE_CUDA OFF)       # Might impact performance, to use CUDA reenable this (Nvidia GPU only).
 set(DLIB_NO_GUI_SUPPORT ON)
-# This MUST be on:
-set(DLIB_DISABLE_ASSERTS ON)
 
 # Include dlib
 add_subdirectory(dlib)
 
 # Settings for dlib
 set_property(TARGET dlib PROPERTY CXX_STANDARD 11)
-#add_definitions(-DDLIB_DISABLE_ASSERTS)
+add_definitions(-DDLIB_DISABLE_ASSERTS)
 
 add_library(paHMM-dist STATIC ${SOURCE_PATHS} dlib/dlib/all/source.cpp)
 target_link_libraries(paHMM-dist PRIVATE dlib)

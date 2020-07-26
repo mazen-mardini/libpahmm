@@ -108,7 +108,7 @@ public:
     inline unsigned int getSequenceId(const string& seqname)
     {
         try {
-            return sequenceNamesToIds[seqname];
+            return sequenceNamesToIds.at(seqname);
         } catch (out_of_range &e) {
             throw HmmException(seqname + " not found");
         }
@@ -117,7 +117,7 @@ public:
     inline unsigned int getSequenceIdFromCString(const char *seqname)
     {
         try {
-            return sequenceNamesToIds[seqname];
+            return sequenceNamesToIds.at(seqname);
         } catch (out_of_range &e) {
             throw HmmException(string(seqname) + " not found");
         }

@@ -30,9 +30,12 @@ class PAHMMError(Exception):
     Errors coming from pahmm will generate an exception of this type.
     """
 
-    def __init__(self, message, cffi_be):
-        c_error = _ffi.string(_lib.ebc_be_last_error_msg(cffi_be)).decode("utf8")
-        super(PAHMMError, self).__init__(message + " " + c_error if c_error else "")
+    def __init__(self, message, be = None):
+        c_error = be.last_error_message() if be else None
+        if c_error:
+            super(PAHMMError, self).__init__(message + " " + c_error if c_error else "")
+        else:
+            super(PAHMMError, self).__init__(message)
 
 
 class BandingEstimator:
@@ -69,7 +72,6 @@ class BandingEstimator:
         else:
             raise Exception(f'Bug! The model "{model}" is not implemented by paHMM.')
 
-
     @staticmethod
     def _path_to_bytes(path: Union[Path, AnyStr]) -> bytes:
         """Used to convert strings and bytearrays to bytes-objects.
@@ -80,6 +82,25 @@ class BandingEstimator:
             return path.encode("utf8")
         elif isinstance(path, Path):
             return str(path).encode("utf8")
+        else:
+            raise PAHMMError(f"Expected a path, got an object of type: {type(path).__name__}")
+
+    def has_last_error(self):
+        """Returns True if last error message is available, and False otherwise.
+        """
+        errorPtr = _lib.ebc_be_last_error_msg(self.__be)
+        return errorPtr != _ffi.NULL
+
+    def last_error_message(self) -> Union[None, str]:
+        """Get last error message.
+
+        Returns None if none is available.
+        """
+        errorPtr = _lib.ebc_be_last_error_msg(self.__be)
+        if errorPtr != _ffi.NULL:
+            return _ffi.string(errorPtr).decode("utf8")
+        else:
+            return None
 
     def execute_gtr_model(self, arg1: Union[None, float] = None, arg2: Union[None, float] = None,
                           arg3: Union[None, float] = None, arg4: Union[None, float] = None,
@@ -97,12 +118,12 @@ class BandingEstimator:
             sequences = _lib.ebc_be_execute_gtr_model(self.__be, arg1, arg2, arg3, arg4, arg5)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not apply GTR model.", self.__be)
+            raise PAHMMError("Could not apply GTR model.", self)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
 
-        return Sequences(sequences)
+        return Sequences(sequences, self)
 
     def execute_hky85_model(self, arg: Union[None, float] = None) -> Union[None, "Sequences"]:
         """Generate a Sequences-object that will use the HKY85 model for distance calculations.
@@ -118,12 +139,12 @@ class BandingEstimator:
             sequences = _lib.ebc_be_execute_hky85_model(self.__be, arg)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not apply HKY85 model.", self.__be)
+            raise PAHMMError("Could not apply HKY85 model.", self)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
 
-        return Sequences(sequences)
+        return Sequences(sequences, self)
 
     def execute_jtt_model(self) -> Union[None, "Sequences"]:
         """Generate a Sequences-object that will use the JTT model for distance calculations.
@@ -134,12 +155,12 @@ class BandingEstimator:
         sequences = _lib.ebc_be_execute_jtt_model(self.__be)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not apply JTT model.", self.__be)
+            raise PAHMMError("Could not apply JTT model.", self)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
 
-        return Sequences(sequences)
+        return Sequences(sequences, self)
 
     def execute_lg_model(self) -> Union[None, "Sequences"]:
         """Generate a Sequences-object that will use the LG model for distance calculations.
@@ -150,12 +171,12 @@ class BandingEstimator:
         sequences = _lib.ebc_be_execute_lg_model(self.__be)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not apply LG model.", self.__be)
+            raise PAHMMError("Could not apply LG model.", self)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
 
-        return Sequences(sequences)
+        return Sequences(sequences, self)
 
     def execute_wag_model(self) -> Union[None, "Sequences"]:
         """Generate a Sequences-object that will use the WAG model for distance calculations.
@@ -166,12 +187,12 @@ class BandingEstimator:
         sequences = _lib.ebc_be_execute_wag_model(self.__be)
 
         if sequences == _ffi.NULL:
-            raise PAHMMError("Could not apply WAG model.", self.__be)
+            raise PAHMMError("Could not apply WAG model.", self)
 
         # Tell the garbage collector how to free the resources
         sequences = _ffi.gc(sequences, _lib.ebc_seq_free)
 
-        return Sequences(sequences)
+        return Sequences(sequences, self)
 
     def set_indel_paramters(self, nb_probability: Union[None, float] = None,
                             rate: Union[None, float] = None):
@@ -219,7 +240,7 @@ class BandingEstimator:
             _lib.ebc_be_set_input(self.__be, fasta.encode("utf8") if isinstance(fasta, str) else fasta)
 
         if not result:
-            raise PAHMMError("Could not read FASTA input.", self.__be)
+            raise PAHMMError("Could not read FASTA input.", self)
 
     def set_file_input(self, fasta_path: Union[Path, AnyStr]):
         """Decide to load input from a file.
@@ -232,7 +253,7 @@ class BandingEstimator:
         result: bool = _lib.ebc_be_set_input_from_file(self.__be, fasta_path)
 
         if not result:
-            raise PAHMMError(f"Could not read sequences from {fasta_path}.", self.__be)
+            raise PAHMMError(f"Could not read sequences from {fasta_path}.", self)
 
 
 class Sequences:
@@ -242,36 +263,75 @@ class Sequences:
     BandingEstimator's execute_*-methods for that.
     """
 
-    def __init__(self, seq):
-        self._seq_count = _lib.ebc_seq_count(seq)
-        self._seq = seq
+    def __init__(self, c_seq, be):
+        self._be = be
+        self._seq_count = _lib.ebc_seq_count(c_seq)
+        self.__seq = c_seq
 
     def __len__(self):
-        """Get the number of sequenes.
+        """Get the number of sequences.
         """
         return self._seq_count
 
     def __getitem__(self, seq_id):
         """Get a sequence using a sequence number/ID.
         """
-        return _ffi.string(_lib.ebc_seq_get_sequence(self._seq, seq_id))
+        c_sequence = _lib.ebc_seq_get_sequence(self.__seq, seq_id)
+        if c_sequence != _ffi.NULL:
+            sequence = _ffi.string(c_sequence)
+        else:
+            sequence = None
+
+        if self._be.has_last_error():
+            raise PAHMMError("Could not get sequence.", self._be)
+
+        return sequence
 
     def get_distance(self, seq_id1: int, seq_id2: int):
         """Retrieve a distance between two sequences using their numbers/IDs.
         """
-        return _lib.ebc_seq_get_distance(self._seq, seq_id1, seq_id2)
+
+        distance = _lib.ebc_seq_get_distance(self.__seq, seq_id1, seq_id2)
+
+        if self._be.has_last_error():
+            raise PAHMMError("Could not get distance.", self._be)
+
+        return distance
 
     def get_distance_from_names(self, seq_name1: Union[bytes, bytearray], seq_name2: Union[bytes, bytearray]):
         """Retrieve a distance between two sequences using their names.
         """
-        return _lib.ebc_seq_get_distance_from_names(self._seq, seq_name1, seq_name2)
+        distance = _lib.ebc_seq_get_distance_from_names(self.__seq, seq_name1, seq_name2)
+
+        if self._be.has_last_error():
+            raise PAHMMError("Could not get distance from sequence names.", self._be)
+
+        return distance
 
     def get_seq_name(self, seq_id: int):
         """Get a sequence using its number or ID.
         """
-        return _ffi.string(_lib.ebc_seq_get_name(self._seq, seq_id))
+        c_name = _lib.ebc_seq_get_name(self.__seq, seq_id)
+        if c_name != _ffi.NULL:
+            name = _ffi.string(c_name)
+        else:
+            name = None
+
+        if self._be.has_last_error():
+            raise PAHMMError("Could not get sequence name.", self._be)
+
+        return name
 
     def get_sequence_from_name(self, seq_name: Union[bytes, bytearray]):
         """Get a sequence using its name.
         """
-        return _ffi.string(_lib.ebc_seq_get_sequence_from_name(self._seq, seq_name))
+        c_name = _lib.ebc_seq_get_sequence_from_name(self.__seq, seq_name)
+        if c_name != _ffi.NULL:
+            name = _ffi.string(c_name)
+        else:
+            name = None
+
+        if self._be.has_last_error():
+            raise PAHMMError("Could not get sequence from name.", self._be)
+
+        return name
