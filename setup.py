@@ -158,7 +158,7 @@ if __name__ == "__main__":
                     "pair hidden Markov models for Python and C.",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url="",
+        url="https://github.com/mazen-mardini/libpahmm",
         packages=setuptools.find_packages('python'),
         package_dir={'': 'python'},
         classifiers=[

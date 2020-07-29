@@ -1,21 +1,21 @@
-##==============================================================================
-## libpahmm - library for paHMM-Tree, a phylogenetic tree estimator
-##
-## Copyright (c) 2020 Mazen Mardini.
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-##     This program is distributed in the hope that it will be useful,
-##     but WITHOUT ANY WARRANTY; without even the implied warranty of
-##     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-##     GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses>.
-##==============================================================================
+# ==============================================================================
+#  libpahmm - library for paHMM-Tree, a phylogenetic tree estimator
+#
+#  Copyright (c) 2020 Mazen Mardini.
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#      This program is distributed in the hope that it will be useful,
+#      but WITHOUT ANY WARRANTY; without even the implied warranty of
+#      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#      GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses>.
+# ==============================================================================
 
 __all__ = ["PAHMMError", "BandingEstimator", "Sequences"]
 
@@ -30,7 +30,7 @@ class PAHMMError(Exception):
     Errors coming from pahmm will generate an exception of this type.
     """
 
-    def __init__(self, message, be = None):
+    def __init__(self, message, be=None):
         c_error = be.last_error_message() if be else None
         if c_error:
             super(PAHMMError, self).__init__(message + " " + c_error if c_error else "")
@@ -53,21 +53,21 @@ class BandingEstimator:
         self.__be = _ffi.gc(self.__be, _lib.ebc_be_free)
 
     def apply_model(self, model):
-        '''
+        """
         After you have associated sequence data to the estimator (using
         set_str_input or set_file_input), use this function to apply a model to
         the data. Necessary parameters are estimated and rough distances are
         computed. This is a convenience function.
-        '''
-        if model=='HKY85':
+        """
+        if model == 'HKY85':
             return self.execute_hky85_model()
-        elif model=='GTR':
+        elif model == 'GTR':
             return self.execute_gtr_model()
-        elif model=='WAG':
+        elif model == 'WAG':
             return self.execute_wag_model()
-        elif model=='LG':
+        elif model == 'LG':
             return self.execute_lg_model()
-        elif model=='JTT':
+        elif model == 'JTT':
             return self.execute_jtt_model()
         else:
             raise Exception(f'Bug! The model "{model}" is not implemented by paHMM.')
