@@ -118,6 +118,20 @@ If everything you want to remove is listed in the file, then run the following c
 sudo xargs rm < install_manifest.txt
 ```
 
+
+## Directory structure
+The following is a description of what's in every directory in the root of the repository.
+
+- auxiliary - Files needed for the Python build script.
+- dlib - The dlib library, it's a dependency of paHMM-dist.
+- examples - Example code that shows how the library can be used.
+- include - Header files for the C pahmm library.
+- paHMM-dist - A slightly modified version of the original paHMM-dist tool.
+- python - The pahmm Python library.
+- src - The source code for the C pahmm library, it's a thin wrapper around paHMM-dist.
+- tests - Tests to verify the correctness of the library.
+
+
 ## Tests
 There are tests that you can run if you wish to verify the correctness of the library output, the test-suite can be found under `tests/`. They verify that the output from the library match the output from the paHMM-Tree tool. You need to have the pahmm Python library installed before you run the tests.
 
@@ -126,6 +140,7 @@ There are tests that you can run if you wish to verify the correctness of the li
 Libpahmm and paHMM-Tree are licensed under the GNU General Public License version 3.0 (GPLv3).
 
 Dlib is licensed under Boost Software License - Version 1.0.
+
 
 ## Credits
 - Marcin Bogusz and Simon Whelan for the development of paHMM-Tree: https://github.com/marbogusz/paHMM-Tree
