@@ -88,17 +88,17 @@ class BandingEstimator:
     def has_last_error(self):
         """Returns True if last error message is available, and False otherwise.
         """
-        errorPtr = _lib.ebc_be_last_error_msg(self.__be)
-        return errorPtr != _ffi.NULL
+        error_ptr = _lib.ebc_be_last_error_msg(self.__be)
+        return error_ptr != _ffi.NULL
 
     def last_error_message(self) -> Union[None, str]:
         """Get last error message.
 
         Returns None if none is available.
         """
-        errorPtr = _lib.ebc_be_last_error_msg(self.__be)
-        if errorPtr != _ffi.NULL:
-            return _ffi.string(errorPtr).decode("utf8")
+        error_ptr = _lib.ebc_be_last_error_msg(self.__be)
+        if error_ptr != _ffi.NULL:
+            return _ffi.string(error_ptr).decode("utf8")
         else:
             return None
 
@@ -194,8 +194,8 @@ class BandingEstimator:
 
         return Sequences(sequences, self)
 
-    def set_indel_paramters(self, nb_probability: Union[None, float] = None,
-                            rate: Union[None, float] = None):
+    def set_indel_parameters(self, nb_probability: Union[None, float] = None,
+                             rate: Union[None, float] = None):
         """Set the nb-probability and rate parameters.
         """
 
@@ -231,7 +231,7 @@ class BandingEstimator:
             super().__setattr__(key, value)
 
     def set_str_input(self, fasta: Union[str, bytes, bytearray]):
-        """Decide to load input from a string/bytes/byterarray.
+        """Decide to load input from a string/bytes/bytearray.
 
         For better performance use set_file_input instead.
         """

@@ -49,13 +49,13 @@ set(DLIB_USE_CUDA OFF)       # Might impact performance, to use CUDA reenable th
 set(DLIB_NO_GUI_SUPPORT ON)
 
 # Include dlib
-add_subdirectory(dlib)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../dlib dlib)
 
 # Settings for dlib
 set_property(TARGET dlib PROPERTY CXX_STANDARD 11)
 add_definitions(-DDLIB_DISABLE_ASSERTS)
 
-add_library(paHMM-dist STATIC ${SOURCE_PATHS} dlib/dlib/all/source.cpp)
+add_library(paHMM-dist STATIC ${SOURCE_PATHS} ${CMAKE_CURRENT_SOURCE_DIR}/../dlib/dlib/all/source.cpp)
 target_link_libraries(paHMM-dist PRIVATE dlib)
 
 
