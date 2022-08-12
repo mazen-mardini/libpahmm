@@ -64,5 +64,9 @@ target_include_directories(paHMM-dist PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/src
 )
 
+set(PAHMM_RANDOM_SEED 1234) # Default value
+# This option makes PAHMM deterministic. This is useful when testing.
+target_compile_definitions(paHMM-dist PUBLIC PAHMM_RANDOM_SEED=${PAHMM_RANDOM_SEED})
+
 set_property(TARGET dlib PROPERTY POSITION_INDEPENDENT_CODE ON)
 #set_property(TARGET paHMM-dist PROPERTY POSITION_INDEPENDENT_CODE ON)

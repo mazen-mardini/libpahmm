@@ -77,7 +77,7 @@ python3 -m pip install pahmm
 ```
 
 **Windows notice:** The library build-scripts (CMakeList.txt and setup.py) have not been tested 
-on Windows, only on Linux and MacOS. Therefore the library *does not have official Windows support* at the time being.
+on Windows, only on Linux and MacOS. Therefore, the library *does not have official Windows support* at the time being.
 
 **C-library notice:** Currently there are no binary packages distributed for the C-library. If you wish to use libpahmm
 as a C-library, you could compile it yourself by following the instructions under the Compilation-section of this README.

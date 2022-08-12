@@ -6,6 +6,7 @@ from initialize import *
 from pahmm import *
 import os
 from typing import List, Union
+from random import shuffle
 
 NUCLEOTIDE_MODELS = ["GTR", "HKY85"]
 AMINO_ACID_MODELS = ["JTT", "LG", "WAG"]
@@ -124,6 +125,12 @@ TOOL_MODEL_PARAM_FLAGS = {
 }
 
 
+def shuffled_list(iterable) -> list:
+    ret = list(iterable)
+    shuffle(ret)
+    return ret
+
+
 def test_fasta(fasta_path: str, model: str, parameters: List[float],
                alpha: Union[None, float], gamma_rate_categories: Union[None, int]):
     """Tests fasta samples.
@@ -190,8 +197,8 @@ def test_fasta(fasta_path: str, model: str, parameters: List[float],
     if len(seqs) != len(tool_adjacency_list):
         return False, "The number of sequences read do not match."
 
-    for i in range(len(seqs)):
-        for j in range(i):
+    for i in shuffled_list(range(len(seqs))):
+        for j in shuffled_list(range(i)):
             lib_distance = seqs.get_distance_from_names(tool_adjacency_list[i][0], tool_adjacency_list[j][0])
             tool_distance = tool_adjacency_list[i][1][j]
 

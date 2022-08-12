@@ -40,7 +40,7 @@ EBCSequences *ebc_seq_create(EBCBandingEstimator *be, Definitions::ModelType mod
     va_list args;
     va_start(args, model_param_count);
 
-    EBCSequences *seq = new EBCSequences;
+    auto *seq = new EBCSequences;
 
     StreamParser *parser;
     if (be->_parser) {
@@ -58,10 +58,10 @@ EBCSequences *ebc_seq_create(EBCBandingEstimator *be, Definitions::ModelType mod
     }
     seq->sequenceType = sequenceType;
 
-    Sequences* inputSeqs = new Sequences(parser, sequenceType, true);
+    auto* inputSeqs = new Sequences(parser, sequenceType, true);
     seq->_sequences = inputSeqs;
 
-    ModelEstimator *tme = new ModelEstimator(inputSeqs, model, Definitions::OptimizationType::BFGS,
+    auto *tme = new ModelEstimator(inputSeqs, model, Definitions::OptimizationType::BFGS,
                                              be->gamma_rate_categories, be->alpha, be->estimate_alpha);
     seq->_modelEstimator = tme;
 
@@ -94,7 +94,7 @@ EBCSequences *ebc_seq_create(EBCBandingEstimator *be, Definitions::ModelType mod
 
     va_end(args);
 
-    BandingEstimator* bandingEstimator =
+    auto* bandingEstimator =
             new BandingEstimator(Definitions::AlgorithmType::Forward, inputSeqs, model,
                                  indelParams, substParams, Definitions::OptimizationType::BFGS,
                                  be->gamma_rate_categories, be->alpha, tme->getGuideTree());
@@ -110,7 +110,7 @@ void ebc_be_set_error(EBCBandingEstimator *be, const string &message)
         return;
     }
 
-    HmmException *& error = reinterpret_cast<HmmException *&>(be->_error);
+    auto *& error = reinterpret_cast<HmmException *&>(be->_error);
 
     if (!error) {
         error = new HmmException(message);
@@ -125,7 +125,7 @@ void ebc_be_set_error(EBCBandingEstimator *be, const HmmException &exception)
         return;
     }
 
-    HmmException *& error = reinterpret_cast<HmmException *&>(be->_error);
+    auto *& error = reinterpret_cast<HmmException *&>(be->_error);
 
     if (!error) {
         error = new HmmException(exception);
@@ -140,7 +140,7 @@ void ebc_be_unset_error(EBCBandingEstimator *be)
         return;
     }
 
-    HmmException *& error = reinterpret_cast<HmmException *&>(be->_error);
+    auto *& error = reinterpret_cast<HmmException *&>(be->_error);
 
     if (error) {
         delete error;

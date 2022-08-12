@@ -63,10 +63,10 @@ endif ()
 set(DLIB_PNG_SUPPORT OFF)
 set(DLIB_GIF_SUPPORT OFF)
 set(DLIB_JPEG_SUPPORT OFF)
-set(DLIB_USE_BLAS OFF)       # Might impact performance, to use BLAS reenable this.
-set(DLIB_USE_LAPACK OFF)     # Might impact performance, to use LAPACK reenable this.
-set(DLIB_USE_MKL_FFT OFF)    # Might impact performance, to use MKL_FFT reenable this.
-set(DLIB_USE_CUDA OFF)       # Might impact performance, to use CUDA reenable this (Nvidia GPU only).
+set(DLIB_USE_BLAS OFF)       # Might impact performance, to use BLAS re-enable this.
+set(DLIB_USE_LAPACK OFF)     # Might impact performance, to use LAPACK re-enable this.
+set(DLIB_USE_MKL_FFT OFF)    # Might impact performance, to use MKL_FFT re-enable this.
+set(DLIB_USE_CUDA OFF)       # Might impact performance, to use CUDA re-enable this (Nvidia GPU only).
 set(DLIB_NO_GUI_SUPPORT ON)
 
 # Add dependencies
@@ -89,6 +89,7 @@ target_include_directories(pahmm PUBLIC
 )
 
 target_compile_definitions(pahmm PRIVATE PAHMM_LIBRARY)
+
 
 # Installation
 install(TARGETS pahmm DESTINATION lib)

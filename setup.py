@@ -56,7 +56,7 @@ def build(force: bool = False):
         if not pahmm_install_prefix_dir.exists():
             pahmm_install_prefix_dir.mkdir()
 
-        run(["cmake", "-DBUILD_STATIC=OFF", ".."],
+        run(["cmake", "-D", "BUILD_STATIC=OFF", ".."],
             cwd=str(pahmm_build_dir), check=True)
         run(["make", "-j", str(cpu_count())], cwd=str(pahmm_build_dir), check=True)
         copyfile(str(pahmm_build_dir / ("libpahmm." + lib_extension)), "python/pahmm/libpahmm." + lib_extension)

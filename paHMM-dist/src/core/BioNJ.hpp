@@ -1,7 +1,8 @@
 //==============================================================================
 // Pair-HMM phylogenetic tree estimator
 // 
-// Copyright (c) 2015-2019 Marcin Bogusz. 2020 Mazen Mardini.
+// Copyright (c) 2015-2019 Marcin Bogusz.
+//               2020 Mazen Mardini for library wrapper compatibility.
 //
 // Core routines of BioNJ - Copyright 1997 Olivier Gascuel, Hoa Sien Cuong
 //

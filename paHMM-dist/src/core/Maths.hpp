@@ -28,6 +28,9 @@
 #include <cstdlib>
 #include <cmath>
 
+#ifdef PAHMM_RANDOM_SEED
+#include <random>
+#endif
 
 namespace EBC
 {
@@ -38,9 +41,12 @@ namespace EBC
 class Maths
 {
 private:
-
-	unsigned int z_rndu;
-
+#ifdef PAHMM_RANDOM_SEED
+    static std::mt19937_64 init_rng();
+    static std::mt19937_64 rng;
+    static std::uniform_int_distribution<int> uniform_dist;
+#endif
+    unsigned int z_rndu;
 public:
 	Maths();
 
