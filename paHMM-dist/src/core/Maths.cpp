@@ -25,12 +25,25 @@
 
 namespace EBC
 {
-
+#ifdef PAHMM_RANDOM_SEED
+std::mt19937_64 Maths::init_rng() {
+    std::mt19937_64 rng;
+    rng.seed(PAHMM_RANDOM_SEED);
+    return rng;
+}
+std::mt19937_64 Maths::rng = Maths::init_rng();
+std::uniform_int_distribution<int> Maths::uniform_dist(0, RAND_MAX);
+#endif
 Maths::Maths()
 {
+#ifndef PAHMM_RANDOM_SEED
+    // Non-deterministic
 	srand((unsigned int)time(0));
 	z_rndu = rand();
-
+#else
+    // Deterministic
+    z_rndu = uniform_dist(rng);
+#endif
 }
 
 double Maths::logSum(double a, double b, double c)
@@ -117,7 +130,11 @@ double* Maths::expLambdaT(double* lambda, double t, int size)
 double Maths::getRandom(double lo=0.0, double hi=1.0)
 {
 	double divider = RAND_MAX/hi;
+#ifndef PAHMM_RANDOM_SEED
 	return lo +  (rand()/divider);
+#else
+    return lo +  (uniform_dist(rng)/divider);
+#endif
 }
 
 void Maths::revMatrixExponentiation(double* Q, double* P)
