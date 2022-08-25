@@ -150,12 +150,12 @@ if __name__ == "__main__":
         requirements = f.read().splitlines()
 
     setuptools.setup(
-        name="python-pahmm",
-        version="0.1.0",
+        name="pahmm",
+        version="0.1.1",
         author="Mazen Mardini",
         author_email="mazen@mengate.se",
-        description="Pairwise statistical phylogenetic distance estimation library using "
-                    "pair hidden Markov models for Python and C.",
+        description="Pairwise statistical phylogenetic distance estimation using "
+                    "pair hidden Markov models for Python.",
         long_description=long_description,
         long_description_content_type="text/markdown",
         url="https://github.com/mazen-mardini/libpahmm",
@@ -168,7 +168,6 @@ if __name__ == "__main__":
             "Natural Language :: English",
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
             "Operating System :: POSIX :: Linux",
-            "Operating System :: MacOS",
         ],
         setup_requires=requirements,
         cmdclass={
@@ -180,7 +179,6 @@ if __name__ == "__main__":
             'clean': PostCleanCommand
         },
         cffi_modules=["auxiliary/python-pahmm-build.py:ffibuilder"],
-        install_requires=requirements,
         python_requires='>=3.6',
         package_data={'pahmm': ["libpahmm." + lib_extension]}
     )

@@ -1,0 +1,20 @@
+# Creates wheels that can be uploaded to PyPi.
+# Run this using: docker-compose up
+
+version: '3.8'
+
+networks:
+  internet:
+    external: true
+
+services:
+  manylinux:
+    userns_mode: "host"
+    container_name: manylinux
+    image: quay.io/pypa/manylinux2014_x86_64
+    command: 'sh -c "yum install -y cmake && cd /io && python3.6 setup.py bdist_wheel && auditwheel repair dist/pahmm-0.1.1-cp36-cp36m-linux_x86_64.whl --plat manylinux2014_x86_64 -w /io/wheelhouse/"'
+    tty: true
+    volumes:
+      - .:/io
+    networks:
+      - internet
