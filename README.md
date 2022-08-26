@@ -97,7 +97,7 @@ Then navigate to "libpahmm/", and enter the following command to build for Pytho
 python3 setup.py install
 ```
 Note: Instead of "install" you could write "develop" (installs, but doesn't copy any binaries to 
-Python's site-packages folder) or "bdist_egg" to create a binary package that's ready to be distributed. Use "clean" to clean up the source directory from any build files (excluding `tests/`).
+Python's site-packages folder). Use "clean" to clean up the source directory from any build files (excluding `tests/`).
 
 To build and install the C-library, just run:
 ```shell script
