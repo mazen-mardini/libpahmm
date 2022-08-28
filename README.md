@@ -4,9 +4,8 @@ using pair hidden Markov models". It's a tool developed by Marcin Bogusz and Sim
 This library, "**libpahmm**" exposes the tool's capabilities to **Python** as well as **C**.
 
 ## What is libpahmm?
-It's a library for performing **M**ultiple **S**equence **A**lignment (**MSA**). It's used to 
-find evolutionary distances between a set of sequences of nucleotides or amino-acids 
-(such as DNA, RNA, proteins, etc.). 
+It's a library for finding evolutionary distances between a set of sequences of nucleotides or amino-acids 
+(such as DNA, RNA, proteins, etc.).
 The library lets you configure the way distance calculations are made. These distances can 
 then be used to create [phylogenetic trees](https://en.wikipedia.org/wiki/Phylogenetic_tree) 
 to help visualize genetic relationships.
