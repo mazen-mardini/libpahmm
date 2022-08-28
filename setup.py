@@ -151,7 +151,7 @@ if __name__ == "__main__":
 
     setuptools.setup(
         name="pahmm",
-        version="0.1.1",
+        version="0.1.2",
         author="Mazen Mardini",
         author_email="mazen@mengate.se",
         description="Pairwise statistical phylogenetic distance estimation using "
